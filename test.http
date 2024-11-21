@@ -1,0 +1,7 @@
+POST http://127.0.0.1:8000/api/places/3/book/
+Content-Type: application/json
+
+{"user_id": 1, "auto_id": 1}
+
+###
+

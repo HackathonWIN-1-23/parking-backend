@@ -67,12 +67,12 @@ class Parking(models.Model):
 
 
 class Place(models.Model):
-    STATUS_CHOICES = (('reserved', 'Reserved'), ('free', 'Free'), ('busy', 'Busy'))
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='free')
-    parking = models.ForeignKey(Parking, on_delete=models.CASCADE, related_name='places')
+    id = models.AutoField(primary_key=True)
+    is_free = models.BooleanField(default=True)
+    parking = models.ForeignKey(Parking, on_delete=models.CASCADE, related_name='places')  # Связь с парковкой
 
     def __str__(self):
-        return f"Place {self.id} - {self.status}"
+        return f"Place {self.id} - {'Free' if self.is_free else 'Reserved'}"
 
 
 class Booking(models.Model):
@@ -83,3 +83,4 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking {self.auto.plate} at {self.place}"
+
