@@ -9,13 +9,14 @@ from rest_framework.permissions import AllowAny
 
 
 
-# api/views.py
 from rest_framework.views import APIView
 from rest_framework import status
 from .serializers import UserRegistrationSerializer
 
 class AvailablePlacesView(ListAPIView):
     serializer_class = PlaceSerializer
+    permission_classes = [AllowAny]
+
 
 
     def get_queryset(self):
@@ -23,7 +24,6 @@ class AvailablePlacesView(ListAPIView):
         start_time = parse_datetime(self.request.query_params.get('start_time'))
         end_time = parse_datetime(self.request.query_params.get('end_time'))
 
-        # Фильтрация доступных мест
         return Place.objects.filter(
             parking_id=parking_id,
             is_free=True
@@ -47,6 +47,7 @@ class UserRegistrationView(APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 
     @action(detail=True, methods=['get'])
@@ -71,13 +72,13 @@ class UserViewSet(viewsets.ModelViewSet):
 class AutoViewSet(viewsets.ModelViewSet):
     queryset = Auto.objects.all()
     serializer_class = AutoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class ParkingViewSet(viewsets.ModelViewSet):
     queryset = Parking.objects.all()
     serializer_class = ParkingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     @action(detail=True, methods=['get'])
     def places(self, request, pk=None):
@@ -99,11 +100,14 @@ from django.utils.timezone import now
 from datetime import timedelta
 
 class PlaceViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+
     """
     ViewSet для управления парковочными местами.
     """
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
+    permission_classes = [AllowAny]
 
     @action(detail=False, methods=['get'])
     def free_places(self, request):
@@ -188,4 +192,4 @@ class PlaceViewSet(viewsets.ModelViewSet):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
